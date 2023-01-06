@@ -1,0 +1,29 @@
+version: '3'
+services:
+  dbs:
+    image: mysql:8.0
+
+    expose:
+      - 3306
+    ports:
+      - "3306:3306"
+    
+    environment:
+      MYSQL_ROOT_PASSWORD: karuna@123
+      MYSQL_DATABASE: db_7
+      MYSQL_USER: karuna
+      MYSQL_PASSWORD: karuna@123
+      TZ: 'Asia/Tokyo'
+    
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+    
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    restart : on-failure
+    depends_on:
+      - dbs
